@@ -5,8 +5,7 @@ function domOn(selector, event, callback, options) {
     domForEach(selector, ele => ele.addEventListener(event, callback, options));
 }
 
-// domForEach('.questionnaire dd', ele => ele.classList.add('hidden'));
-  
+// On click
 domOn('#rectangle', 'click', evt => {
     const ele = evt.currentTarget;
     const rect = ele.querySelector('rect');
@@ -14,6 +13,7 @@ domOn('#rectangle', 'click', evt => {
     rect.setAttribute("fill", color == "black" ? "red" : "black");
 });
 
+// On hover
 domOn('#donut', 'mouseover', evt => {
     const ele = evt.currentTarget;
     const circle = ele.querySelectorAll('circle')[0];

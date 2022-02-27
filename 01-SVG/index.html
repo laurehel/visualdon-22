@@ -30,9 +30,19 @@
     </svg>
 
     <h2>Path</h2>
-    <svg width="400" height="100">
-      <path id="L" d="M 1 1 L 1 90 H 50" fill="none" stroke="steelblue" stroke-width="2"></path>
-      <path id="A" d="M 70 90 L 100 0 L 130 90 M 90 50 H 20" fill="none" stroke="steelblue" stroke-width="2"></path>
+    <svg width="1000" height="100">
+      <path id="L" d="M 1 0 L 1 90 H 50" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="A" d="M 70 90 L 100 0 L 130 90 M 80 50 L 120 50" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="U" d="M 150 0 V 70 M 150 70 C 150 70, 185 120, 220 70 V -70" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="R" d="M 240 90 V -90 M 240 0 C 240 0, 320 22, 240 45 M 240 45 L 280 90" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="E" d="M 300 0 V 90 L 360 90 M 300 45 L 330 45 M 300 1 L 360 1" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="tiret" d="M 380 45 L 410 45" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="H" d="M 430 0 V 90 M 430 45 L 460 45 M 460 0 V 90" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="E" d="M 480 0 V 90 L 540 90 M 480 45 L 510 45 M 480 1 L 540 1" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="L" d="M 560 0 V 90 L 620 90" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="E" d="M 640 0 V 90 L 700 90 M 640 45 L 670 45 M 640 1 L 700 1" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="N" d="M 720 90 V -90 M 720 0 L 750 90 M 750 90 V -90" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="E" d="M 770 0 V 90 L 830 90 M 770 45 L 800 45 M 770 1 L 830 1" fill="none" stroke="steelblue" stroke-width="2"></path>
     </svg>
 
     <h1>Animer des formes</h1>
@@ -49,7 +59,52 @@
     </svg>
 
     <h2>Prenez la première lettre de votre prénom que vous avez créée ci-dessus. Faite bouger une forme de votre choix le long de la lettre</h2>
-
+    <svg id="move1" width="400" height="140">
+      <path id="Lobject" d="M 10 10 L 10 100 H 60" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <rect width="10" height="10" style="fill:rgb(0,0,255)">
+        <animateMotion dur="3s" repeatCount="indefinite" path="M 5 5 L 5 95 H 55"></animateMotion>
+      </rect>
+      <!-- <circle r="5" fill="red" stroke="none">
+        <animateMotion dur="5s" repeatCount="indefinite" path="M 10 10 L 10 100 H 60"></animateMotion>
+      </circle> -->
+      <!-- <path d="M 5 5 L 15 5 L 15 15 L 5 15 L 5 5" fill="red" stroke="none">
+        <animateMotion dur="5s" repeatCount="indefinite" rotate="auto">
+          <mpath xlink:href="#Lobject"/>
+        </animateMotion>
+      </path> -->
+    </svg>
+    
+    <svg id="move2" width="1000" height="100">
+      <path id="Lobject2" d="M 1 0 L 1 90 H 50" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="Aobject" d="M 70 90 L 100 0 L 130 90 M 80 50 L 120 50" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="Uobject" d="M 150 0 V 70 M 150 70 C 150 70, 185 120, 220 70 V -70" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="Robject" d="M 240 90 V -90 M 240 0 C 240 0, 320 22, 240 45 M 240 45 L 280 90" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="Eobject" d="M 300 0 V 90 L 360 90 M 300 45 L 330 45 M 300 1 L 360 1" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="tiretobject" d="M 380 45 L 410 45" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="Hobject" d="M 430 0 V 90 M 430 45 L 460 45 M 460 0 V 90" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="Eobject" d="M 480 0 V 90 L 540 90 M 480 45 L 510 45 M 480 1 L 540 1" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="Lobject" d="M 560 0 V 90 L 620 90" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="Eobject" d="M 640 0 V 90 L 700 90 M 640 45 L 670 45 M 640 1 L 700 1" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="Nobject" d="M 720 90 V -90 M 720 0 L 750 90 M 750 90 V -90" fill="none" stroke="steelblue" stroke-width="2"></path>
+      <path id="Eobject" d="M 770 0 V 90 L 830 90 M 770 45 L 800 45 M 770 1 L 830 1" fill="none" stroke="steelblue" stroke-width="2"></path>
+    
+      <circle r="5" fill="red" stroke="none">
+        <animateMotion dur="15s" repeatCount="indefinite" 
+        path="M 1 0 L 1 90 H 50 
+        M 70 90 L 100 0 L 130 90 M 80 50 L 120 50 
+        M 150 0 V 70 M 150 70 C 150 70, 185 120, 220 70 V -70 
+        M 240 90 V -90 M 240 0 C 240 0, 320 22, 240 45 M 240 45 L 280 90 
+        M 300 0 V 90 L 360 90 M 300 45 L 330 45 M 300 1 L 360 1
+        M 380 45 L 410 45
+        M 430 0 V 90 M 430 45 L 460 45 M 460 0 V 90
+        M 480 0 V 90 L 540 90 M 480 45 L 510 45 M 480 1 L 540 1
+        M 560 0 V 90 L 620 90
+        M 640 0 V 90 L 700 90 M 640 45 L 670 45 M 640 1 L 700 1
+        M 720 90 V -90 M 720 0 L 750 90 M 750 90 V -90
+        M 770 0 V 90 L 830 90 M 770 45 L 800 45 M 770 1 L 830 1">
+        </animateMotion>
+      </circle>
+    </svg>
 
   </body>
 </html>
