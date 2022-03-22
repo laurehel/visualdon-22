@@ -51,7 +51,7 @@ function displayOnDom(datas) {
 		.enter() // Crée les éléments manquants et retourne la sélection enter 
 		.append("p")
 		.text(function (d) {
-			return d.nom_utilisateur + " : " + d.titres_posts.length; // Problème avec length !!
+			return d.nom_utilisateur + " : " + d.titres_posts.length; 
 		});
 
 	let maxIndex = d3.maxIndex(datas, function (data) { // Index maximum du tableau datas
