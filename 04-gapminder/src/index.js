@@ -1,11 +1,12 @@
 import * as d3 from 'd3'
 
-// 1 - GRAPHIQUE STATIQUE
-// Pour importer les données
 import PIB from '../data/income_per_person_gdppercapita_ppp_inflation_adjusted.csv'
 import esperanceVie from '../data/life_expectancy_years.csv'
 import population from '../data/population_total.csv'
 
+import map from "../data/worldmap.json";
+
+// 1 - GRAPHIQUE STATIQUE
 // // Voir le contenu des tableaux csv
 // console.log(PIB); // Tableau de 195 lignes, de 1800 à 2050 pour chaque pays
 // console.log(esperanceVie); // Tableau de 195 lignes, de 1800 à 2100 pour chaque pays
@@ -136,4 +137,104 @@ function cleanData(data) {
 //     }
 // })
 
+// ********************************************************************************
 
+// 2 - CARTOGRAPHIE
+let w = screen.availWidth;
+let h = screen.availHeight - 50;
+
+var svg2 = d3
+    .select('#cartography')
+    .append("svg")
+    .attr("width", w)
+    .attr("height", h);
+
+// Création de la projection de la carte
+var projection = d3
+    .geoMercator()
+    .center([0, 20])
+    .scale([w / (2 * Math.PI)])
+    .translate([w / 2, h / 2]);
+
+var path = d3
+    .geoPath()
+    .projection(projection);
+
+// Donne la couleur d'un pays en fonction de son nombre d'habitants
+var colorScale = d3
+    .scaleLinear() // Créer une échelle linéaire de couleur entre deux valeurs qui sont dans le tableau range
+    .domain([50, 100])
+    .range(["#e4d7f3", "#4a168b"]);
+    // .scaleThreshold()
+    // .domain([50, 100])
+    // .range(d3.schemeBlues[7]);
+
+// Dessine la carte à partir du fichier json
+svg2
+    .append("g")
+    .selectAll("path")
+    .data(map.features)
+    .enter()
+    .append("path")
+    .attr("d", path) // Dessine chaque pays
+    .attr("fill", function(d) {
+        const data = monEsperanceDeVie(d["properties"]["name"]); // Couleurs des pays selon l'espérance de vie
+        if (data) {
+            return colorScale(data);
+        }
+        return "red";
+    })
+    // Marchent pas
+    .style("stroke", "transparent")
+    .attr("class", function(d) { 
+        return "Country" 
+    } )
+    .style("opacity", .8)
+    .on("mouseover", mouseOver)
+    .on("mouseleave", mouseLeave);
+
+// Cherche les données de l'espérance de vie
+function monEsperanceDeVie(country) {
+    // console.log(country);
+
+    try { 
+        // Si le pays est dans le tableau, on va chercher la valeur de l'espérance de vie
+        // Si le nom du pays dans le csv est identique au nom du pays dans le json, on va chercher la valeur de l'espérance de vie
+        const c = esperanceVie.find((myLifeCountry) => myLifeCountry.country === country);
+        return c["2021"];
+    } 
+    catch (e) { 
+        // Si le nom du pays dans le csv n'est pas identique au nom du pays dans le json, on retourne le pays en null
+        // console.log("pays", country);
+        return null;
+    }
+
+}
+
+// Parcours de la souris (marche pas)
+let mouseOver = function(d) {
+
+    d3.selectAll(".Country")
+      .transition()
+      .duration(200)
+      .style("opacity", .5)
+    d3.select(this)
+      .transition()
+      .duration(200)
+      .style("opacity", 1)
+      .style("stroke", "black")
+
+  }
+
+  let mouseLeave = function(d) {
+
+    d3.selectAll(".Country")
+      .transition()
+      .duration(200)
+      .style("opacity", .8)
+    d3.select(this)
+      .transition()
+      .duration(200)
+      .style("stroke", "transparent")
+
+  }
