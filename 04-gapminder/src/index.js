@@ -224,9 +224,9 @@ let mouseOver = function(d) {
       .style("opacity", 1)
       .style("stroke", "black")
 
-  }
+}
 
-  let mouseLeave = function(d) {
+let mouseLeave = function(d) {
 
     d3.selectAll(".Country")
       .transition()
@@ -237,4 +237,210 @@ let mouseOver = function(d) {
       .duration(200)
       .style("stroke", "transparent")
 
-  }
+}
+
+// ********************************************************************************
+
+// 3 - ANIMATION
+// Marges du graphique
+const margin3 = { top: 10, right: 20, bottom: 30, left: 50 },
+        width3 = screen.availWidth - 100 - margin3.left - margin3.right,
+        height3 = screen.availHeight - 300 - margin3.top - margin3.bottom;
+
+// Création d'un élément svg graphique avec ses marges dans le div #staticGraph
+const svg3 = d3
+    .select('#animation')
+    .append('svg')
+    .attr('width', width3 + margin3.left + margin3.right)
+    .attr('height', height3 + margin3.top + margin3.bottom)
+    .append('g')
+    .attr('transform', 'translate(' + margin3.left + ',' + margin3.top + ')');
+
+// Création d'un nouveau tableau pour regrouper les informations désirées des 3 tableaux csv ()
+let datas3 = [];
+for (let index = 0; index < population.length; index++) {
+
+    const name = population[index]["country"];
+
+    const p = PIB.find((itmInner) => itmInner.country === name);
+    const l = esperanceVie.find((itmInner) => itmInner.country === name);
+
+    if (p && l) {
+        datas3.push({
+            name: population[index]["country"],
+            population: population[index],
+            pib: p,
+            esperance_vie: l
+        });
+    }
+
+}
+
+let minPib = 10000000;
+for (const country of datas3) {
+    for (const [key, v] of Object.entries(country.pib)) {
+        let value = cleanData(v);
+        if (minPib > value) minPib = value;
+    }
+}
+    
+let maxPib = 0;
+for (const country of datas3) {
+    for (const [key, v] of Object.entries(country.pib)) {
+        let value = cleanData(v);
+        if (maxPib < value) maxPib = value;
+    }
+}
+
+let maxLife = 0;
+for (const country of datas3) {
+    for (const [key, v] of Object.entries(country.esperance_vie)) {
+        let value = cleanData(v);
+        if (maxLife < value) maxLife = value;
+    }
+}
+
+let minPop = 1000000000000000;
+for (const country of datas3) {
+    for (const [key, v] of Object.entries(country.population)) {
+        let value = cleanData(v);
+        if (minPop > value) minPop = value;
+    }
+}
+
+let maxPop = 0;
+for (const country of datas3) {
+    for (const [key, v] of Object.entries(country.population)) {
+        let value = cleanData(v);
+        if (maxPop < value) maxPop = value;
+    }
+}
+
+// 2 axes ajoutés
+const x3 = d3
+    .scaleLog()
+    .domain([minPib, 128000])
+    .range([0, width3]);
+
+svg3.append('g')
+    .attr("transform", "translate(0," + height3 + ")")
+    .call(d3.axisBottom(x3));
+
+const y3 = d3
+    .scaleLinear()
+    .domain([0, maxLife])
+    .range([height3, 0])
+
+svg.append('g')
+    .call(d3.axisLeft(y3));
+
+// Ajout d'une grandeur aux ronds
+const z3 = d3
+    .scaleLinear()
+    .domain([minPop, maxPop])
+    .range([1, 40]);
+
+// Ajout des points
+function displayDot(year) {
+
+    removeAllDot(); // Suppression des points précédents
+
+    svg3
+        .append("g")
+        .attr("id", "groupDot")
+        .selectAll("dot")
+        .data(datas3)
+        .join(
+            enter => enter.append("circle")
+            .attr("id", function(d) {
+                return d.name
+            })
+
+            .attr("cx", function(d) {
+                return x3(cleanData(d.pib[year]));
+            })
+            .attr("cy", function(d) {
+                return y3(d.esperance_vie[year]);
+            })
+            .attr("r", function(d) {
+                return z3(cleanData(d.population[year]));
+            })
+            .style("fill", "purple")
+            .style("opacity", "0.7")
+            .attr("stroke", "black"),
+
+            update => update
+            .attr("cx", function(d) {
+                return x(cleanData(d.pib[year]));
+            })
+            .attr("cy", function(d) {
+                return y(d.life[year]);
+            })
+            .attr("r", function(d) {
+                return z(cleanData(d.population[year]));
+            })
+        )
+        .transition(d3.transition()
+            .duration(500)
+            .ease(d3.easeLinear)
+        )
+
+}
+
+// Intervalle de 1800 à 2050, lancé automatiquement
+let interval;
+function runInterval() {
+
+    interval = setInterval(() => {
+
+        year++;
+        displayDot(year);
+        document.getElementById("yearRange").value = year;
+        document.querySelector("label").innerText = year;
+
+    }, 500);
+
+}
+
+// Bouton play/pause
+let running = true;
+d3.select("#play").on("click", function() {
+    if (running) {
+
+        clearTimeout(interval);
+        document.getElementById("play").innerText = "Play";
+        running = false;
+
+    } else {
+
+        runInterval();
+        document.getElementById("play").innerText = "Pause";
+        running = true;
+
+    }
+});
+
+// Affichage des années à côté du bouton play/pause
+let year = 1800;
+
+document.getElementById("yearRange").min = year;
+document.getElementById("yearRange").max = 2050;
+
+document.getElementById("yearRange").addEventListener("change", function(event) {
+
+    clearTimeout(interval)
+    displayDot(this.value);
+    document.querySelector("label").innerText = this.value;
+    year = this.value;
+    running = false;
+
+});
+
+// Lancement d'intervalle automatique
+runInterval();
+
+// Suppression des points à chaque changement d'année
+function removeAllDot() {
+    svg3.select("#groupDot").remove();
+}
+
